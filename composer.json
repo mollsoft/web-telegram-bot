@@ -1,0 +1,40 @@
+{
+    "name": "mollsoft/web-telegram-bot",
+    "description": "Create Telegram Bots in Laravel similar to creating a website.",
+    "homepage": "https://github.com/mollsoft/web-telegram-bot",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "MollSoft",
+            "email": "info@mollsoft.com"
+        }
+    ],
+    "keywords": [
+        "laravel",
+        "telegram",
+        "telegraph",
+        "bot"
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^10.0",
+        "illuminate/support": "^10.0",
+        "spatie/laravel-package-tools": "^1.15",
+        "defstudio/telegraph": "^1.37",
+        "symfony/dom-crawler": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mollsoft\\WebTelegramBot\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mollsoft\\WebTelegramBot\\WebTelegramBotServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Telegram\Forms;
+
+use Mollsoft\WebTelegramBot\Form;
+
+class ExampleForm extends Form
+{
+    public function rules(): array
+    {
+        return [
+            'first_name' => ['required', 'string', 'min:5', 'max:255'],
+            'last_name' => ['required', 'string', 'min:5', 'max:255'],
+            'middle_name' => ['string', 'min:5', 'max:255'],
+        ];
+    }
+}

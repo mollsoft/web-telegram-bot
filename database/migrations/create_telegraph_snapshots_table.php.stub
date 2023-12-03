@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Mollsoft\WebTelegramBot\Enums\MessageDirection;
+use Mollsoft\WebTelegramBot\Models\TelegraphChat;
+use Mollsoft\WebTelegramBot\Models\TelegraphVisit;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        Schema::create('telegraph_snapshots', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(TelegraphChat::class, 'chat_id')
+                ->constrained('telegraph_chats')
+                ->cascadeOnDelete();
+            $table->foreignIdFor(TelegraphVisit::class, 'visit_id')
+                ->constrained('telegraph_visits')
+                ->cascadeOnDelete();
+            $table->enum('direction', MessageDirection::values());
+            $table->json('data');
+            $table->string('checksum')
+                ->index();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('telegraph_snapshots');
+    }
+};

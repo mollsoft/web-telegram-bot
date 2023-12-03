@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Telegram;
+
+use Illuminate\Foundation\Http\Events\RequestHandled;
+use Illuminate\Support\Carbon;
+use Mollsoft\WebTelegramBot\Render;
+use Mollsoft\WebTelegramBot\Request;
+use Throwable;
+
+class Kernel extends \Illuminate\Foundation\Http\Kernel
+{
+    protected $middleware = [
+        \Illuminate\Session\Middleware\StartSession::class,
+        \Mollsoft\WebTelegramBot\Middleware\TelegraphMiddleware::class
+    ];
+
+    protected $middlewareGroups = [
+        'web' => [],
+        'telegraph' => [
+            \App\Telegram\Middleware\ExampleMiddleware::class
+        ],
+    ];
+
+    protected $middlewareAliases = [
+        'live' => \Mollsoft\WebTelegramBot\Middleware\LiveMiddleware::class,
+    ];
+
+    /**
+     * @param Request $request
+     */
+    public function handle($request)
+    {
+        $this->requestStartedAt = Carbon::now();
+
+        try {
+            $request->enableHttpMethodParameterOverride();
+
+            $response = $this->sendRequestThroughRouter($request);
+
+            $render = $this->app->make(Render::class);
+            $render->send($request, $response);
+        } catch (Throwable $e) {
+            $this->reportException($e);
+
+            $response = $this->renderException($request, $e);
+        }
+
+        $this->app['events']->dispatch(
+            new RequestHandled($request, $response)
+        );
+
+        return $response;
+    }
+}

@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Telegram\Controllers;
+
+use App\Telegram\Forms\ExampleForm;
+
+class ExampleController
+{
+    public function index(): string
+    {
+        return '<message><p>Hello world!</p></message>';
+    }
+
+    public function form(ExampleForm $form): string
+    {
+        if ($form->validate()) {
+            return '<message><p>Form successfully submitted '.json_encode($form->get()).'!</p></message>';
+        }
+
+        return '<message><p>Current field: '.$form->current().', error: '.$form->error().', data: '.json_encode($form->get()).'</p></message>';
+    }
+}

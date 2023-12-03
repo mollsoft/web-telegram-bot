@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Telegram\Middleware;
+
+use Illuminate\Support\Facades\App;
+use Mollsoft\WebTelegramBot\Request;
+use Closure;
+
+class ExampleMiddleware
+{
+    public function handle(Request $request, Closure $next)
+    {
+        // ...
+
+        return $next($request);
+    }
+}
