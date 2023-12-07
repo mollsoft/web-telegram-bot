@@ -14,10 +14,14 @@ class TelegraphChat extends \DefStudio\Telegraph\Models\TelegraphChat
         'last_name',
         'bio',
         'info_at',
+        'display_at',
+        'displayed',
     ];
 
     protected $casts = [
         'info_at' => 'datetime',
+        'display_at' => 'datetime',
+        'displayed' => 'boolean',
     ];
 
     public function visits(): HasMany

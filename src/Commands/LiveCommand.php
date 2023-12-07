@@ -2,8 +2,11 @@
 
 namespace Mollsoft\WebTelegramBot\Commands;
 
+use Illuminate\Support\Facades\Date;
+use Mollsoft\WebTelegramBot\Models\TelegraphChat;
 use Mollsoft\WebTelegramBot\Models\TelegraphVisit;
 use Mollsoft\WebTelegramBot\ProcessRunner;
+use Mollsoft\WebTelegramBot\Screen;
 use Mollsoft\WebTelegramBot\WebhookHandler;
 use DefStudio\Telegraph\DTO\TelegramUpdate;
 use Illuminate\Console\Command;
@@ -19,11 +22,13 @@ class LiveCommand extends Command
     protected $description = 'Telegraph Live Observer';
 
     protected int $frequency;
+    protected int $inactiveClearDialog;
     protected float $started;
 
     public function handle(): void
     {
         $this->frequency = (int)config('telegraph.live_frequency', 10);
+        $this->inactiveClearDialog = (int)config('telegraph.inactive_clear_dialog', 0);
         $this->started = microtime(true);
 
         if ($this->hasOption('debug')) {
@@ -62,6 +67,22 @@ class LiveCommand extends Command
                         'isLive' => true,
                     ]);
                 });
+
+            if ($this->inactiveClearDialog) {
+                TelegraphChat::query()
+                    ->whereDisplayed(true)
+                    ->where('display_at', '<=', Date::now()->subSeconds($this->inactiveClearDialog))
+                    ->each(function (TelegraphChat $chat) {
+                        $this->info('Clear dialog #'.$chat->id);
+
+                        $chat->update([
+                            'displayed' => false,
+                        ]);
+
+                        $screen = new Screen($chat);
+                        $screen->clear();
+                    });
+            }
 
             $this->info('Pause '.$this->frequency.' seconds...');
             sleep($this->frequency);

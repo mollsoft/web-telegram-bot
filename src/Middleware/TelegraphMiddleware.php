@@ -32,6 +32,8 @@ class TelegraphMiddleware
         $this->snapshot();
 
         if (($message = $request->message())) {
+            $hasScreen = $this->screen->count() > 0;
+
             foreach( config('telegraph.home_message_prefix', ['/start', '🏘']) as $prefix ) {
                 if (mb_strpos($message->text(), $prefix) !== false) {
                     $this->screen->clear();
@@ -52,6 +54,10 @@ class TelegraphMiddleware
                     ),
                 )
             );
+
+            if( mb_strpos($message->text(), '/start') !== false && !$hasScreen ) {
+                return redirect()->refresh();
+            }
 
             foreach( config('telegraph.home_message_prefix', ['/start', '🏘']) as $prefix ) {
                 if (mb_strpos($message->text(), $prefix) !== false) {

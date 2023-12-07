@@ -20,6 +20,10 @@ return new class () extends Migration {
             $table->string('last_name')->nullable();
             $table->string('bio')->nullable();
             $table->timestamp('info_at')->nullable();
+            $table->timestamp('display_at')
+                ->nullable();
+            $table->boolean('displayed')
+                ->default(false);
             $table->timestamps();
 
             $table->unique(['chat_id', 'telegraph_bot_id']);

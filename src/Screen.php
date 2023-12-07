@@ -38,7 +38,7 @@ class Screen
     {
         $item = $this->redis->lIndex($this->redisKey, $index);
         if ($item) {
-            return ScreenMessage::fromJson($item, $this->redis, $this->redisKey, $index);
+            return ScreenMessage::fromJson($item, $this->redis, $this->redisKey, $index, $this);
         }
 
         return null;

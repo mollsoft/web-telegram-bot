@@ -171,6 +171,11 @@ class Request extends \Illuminate\Http\Request
     public function visit(): TelegraphVisit
     {
         if ($this->visit === null) {
+            $this->chat->update([
+                'display_at' => Date::now(),
+                'displayed' => true,
+            ]);
+
             $requestURI = $this->requestURI();
             $this->visit = $this->chat->visits()->whereCurrent(true)->first();
 

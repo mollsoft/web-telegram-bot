@@ -4,6 +4,11 @@ use DefStudio\Telegraph\Telegraph;
 
 return [
     /*
+     * Clearing dialog when inactive (in seconds)
+     */
+    'inactive_clear_dialog' => 1800,
+
+    /*
      * Home message prefix
      */
     'home_message_prefix' => ['/start', '🏘'],

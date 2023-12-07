@@ -81,6 +81,11 @@ class Render
             ->initDisplayedMessages()
             ->eachLines()
             ->clearInboxMessages(true);
+
+        $this->chat->update([
+            'display_at' => Date::now(),
+            'displayed' => true,
+        ]);
     }
 
     protected function initPendingMessages(): static
