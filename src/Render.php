@@ -212,9 +212,11 @@ class Render
                 $displayedMessage->checksum = $pendingMessage->checksum;
                 $displayedMessage->save();
             } else {
+                $this->deleteRemain = true;
+
                 if ($index !== 0 || $this->screen->count() > 1) {
                     $displayedMessage->delete();
-                    $this->deleteRemain = true;
+                    $displayedMessage = null;
                 }
 
                 $message = $pendingMessage->telegraph->send();
@@ -227,9 +229,15 @@ class Render
                     (
                         ($fileId = $message->json('result.video.file_id'))
                         ||
+                        ($fileId = $message->json('result.video.0.file_id'))
+                        ||
                         ($fileId = $message->json('result.audio.file_id'))
                         ||
+                        ($fileId = $message->json('result.audio.0.file_id'))
+                        ||
                         ($fileId = $message->json('result.photo.file_id'))
+                        ||
+                        ($fileId = $message->json('result.photo.0.file_id'))
                     )
                 ) {
                     Cache::set($pendingMessage->fileCacheKey, $fileId, 3600);
@@ -243,6 +251,11 @@ class Render
                         checksum: $pendingMessage->checksum,
                     )
                 );
+
+                if( $displayedMessage ) {
+                    $displayedMessage->delete();
+                    $displayedMessage = null;
+                }
             }
         } elseif ($displayedMessage) {
             $displayedMessage->delete();
@@ -257,9 +270,15 @@ class Render
                 (
                     ($fileId = $message->json('result.video.file_id'))
                     ||
+                    ($fileId = $message->json('result.video.0.file_id'))
+                    ||
                     ($fileId = $message->json('result.audio.file_id'))
                     ||
+                    ($fileId = $message->json('result.audio.0.file_id'))
+                    ||
                     ($fileId = $message->json('result.photo.file_id'))
+                    ||
+                    ($fileId = $message->json('result.photo.0.file_id'))
                 )
             ) {
                 Cache::set($pendingMessage->fileCacheKey, $fileId, 3600);
