@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 class TelegraphBot extends \DefStudio\Telegraph\Models\TelegraphBot
 {
-    public function updates(int $timeout = 0, int $offset = null): Collection
+    public function updates(int $timeout = null, int $offset = null, int $limit = null, array $allowedUpdates = null): Collection
     {
         $request = TelegraphFacade::bot($this)
             ->botUpdates()
@@ -17,6 +17,12 @@ class TelegraphBot extends \DefStudio\Telegraph\Models\TelegraphBot
 
         if ($offset !== null) {
             $request = $request->withData('offset', $offset);
+        }
+        if( $limit !== null ) {
+            $request = $request->withData('limit', $limit);
+        }
+        if( $allowedUpdates !== null ) {
+            $request = $request->withData('allowedUpdates', $allowedUpdates);
         }
 
         $response = $request->send();
