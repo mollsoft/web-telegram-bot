@@ -16,7 +16,7 @@
         "bot"
     ],
     "require": {
-        "php": "^8.2",
+        "php": ">=8.2",
         "ext-redis": "*",
         "illuminate/contracts": "^10.0",
         "illuminate/support": "^10.0",
