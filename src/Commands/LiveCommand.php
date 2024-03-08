@@ -80,7 +80,7 @@ class LiveCommand extends Command
                         ]);
 
                         $screen = new Screen($chat);
-                        $screen->clear();
+                        $screen->clear(false);
                     });
             }
 

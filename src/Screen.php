@@ -82,9 +82,11 @@ class Screen
         return true;
     }
 
-    public function clear(): void
+    public function clear(bool $force = true): void
     {
-        $this->messages()->filter()->each(fn(ScreenMessage $item) => $item->delete());
+        $this->messages()
+            ->filter(fn(ScreenMessage $message) => $force || !$message->main)
+            ->each(fn(ScreenMessage $item) => $item->delete());
         $this->defrag();
     }
 }

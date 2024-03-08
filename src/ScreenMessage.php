@@ -14,7 +14,8 @@ class ScreenMessage implements \JsonSerializable
         public readonly string $direction,
         public array $body,
         public string $checksum,
-        public bool $deleted = false
+        public bool $deleted = false,
+        public bool $main = false,
     ) {
     }
 
@@ -52,7 +53,7 @@ class ScreenMessage implements \JsonSerializable
         $this->save();
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'id' => $this->id,
@@ -60,6 +61,7 @@ class ScreenMessage implements \JsonSerializable
             'body' => $this->body,
             'checksum' => $this->checksum,
             'deleted' => $this->deleted,
+            'main' => $this->main,
         ];
     }
 
@@ -81,6 +83,7 @@ class ScreenMessage implements \JsonSerializable
             body: $json['body'],
             checksum: $json['checksum'],
             deleted: $json['deleted'],
+            main: $json['main'] ?? false,
         );
 
         return $object

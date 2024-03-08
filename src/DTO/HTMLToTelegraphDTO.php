@@ -11,6 +11,7 @@ readonly class HTMLToTelegraphDTO
         public Telegraph $telegraph,
         public string $checksum,
         public ?string $fileCacheKey,
+        public bool $main = false,
     ) {
     }
 }

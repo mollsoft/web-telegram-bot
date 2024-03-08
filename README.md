@@ -117,3 +117,24 @@ php artisan telegraph:live --debug
 ## How make 404 page?
 
 Create file `resources/views/telegraph/errors/404.blade.php`.
+
+## Autoclear dialog
+
+If you want to create a message that will not be permanently deleted, use the <main> tag instead of the <message> tag
+
+Example:
+```html
+<main>
+    <video src="{{ resource_path("media/logo.mp4") }}" />
+    <reply-keyboard>
+        <row>
+            <columm>Menu 1</columm>
+            <column>Menu 2</column>
+        </row>
+        <row>
+            <columm>Menu 3</columm>
+            <column>Menu 4</column>
+        </row>
+    </reply-keyboard>
+</main>
+```

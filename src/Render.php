@@ -3,11 +3,8 @@
 namespace Mollsoft\WebTelegramBot;
 
 use DefStudio\Telegraph\Keyboard\Keyboard;
-use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redis;
 use Mollsoft\WebTelegramBot\Models\TelegraphChat;
 use Mollsoft\WebTelegramBot\DTO\HTMLToTelegraphDTO;
 use Mollsoft\WebTelegramBot\Enums\MessageDirection;
@@ -210,6 +207,7 @@ class Render
 
                 $displayedMessage->body = $pendingMessage->body;
                 $displayedMessage->checksum = $pendingMessage->checksum;
+                $displayedMessage->main = $pendingMessage->main;
                 $displayedMessage->save();
             } else {
                 $this->deleteRemain = true;
@@ -249,6 +247,7 @@ class Render
                         direction: MessageDirection::OUT->value,
                         body: $pendingMessage->body,
                         checksum: $pendingMessage->checksum,
+                        main: $pendingMessage->main,
                     )
                 );
 
@@ -290,6 +289,7 @@ class Render
                     direction: MessageDirection::OUT->value,
                     body: $pendingMessage->body,
                     checksum: $pendingMessage->checksum,
+                    main: $pendingMessage->main,
                 )
             );
         }

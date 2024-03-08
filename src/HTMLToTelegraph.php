@@ -24,9 +24,10 @@ class HTMLToTelegraph
     protected Crawler $crawler;
 
     public function __construct(
-        protected readonly Request $request,
+        protected readonly Request  $request,
         protected readonly Response $response
-    ) {
+    )
+    {
         $this->collection = collect();
         $this->chat = $this->request->chat();
         $this->crawler = (new Crawler("<root>{$this->response->getContent()}</root>"))->filter('root > *');
@@ -38,9 +39,9 @@ class HTMLToTelegraph
     public function run(): Collection
     {
         $this->crawler->each(function (Crawler $element) {
-            if ($element->nodeName() === 'message') {
+            if (in_array($element->nodeName(), ['message', 'main'])) {
                 $this->collection->add(
-                    $this->createMessage($element)
+                    $this->createMessage($element, $element->nodeName() === 'main')
                 );
             }
         });
@@ -64,7 +65,7 @@ class HTMLToTelegraph
 
     protected ?array $messageBody = null;
 
-    protected function createMessage(Crawler $element): HTMLToTelegraphDTO
+    protected function createMessage(Crawler $element, bool $main = false): HTMLToTelegraphDTO
     {
         $lines = [];
         $telegraph = $this->chat->message('');
@@ -123,7 +124,7 @@ class HTMLToTelegraph
         $checksum = md5(trim($element->html()));
         $telegraph = $telegraph->message($text);
 
-        return new HTMLToTelegraphDTO($this->messageBody, $telegraph, $checksum, $fileCacheKey);
+        return new HTMLToTelegraphDTO($this->messageBody, $telegraph, $checksum, $fileCacheKey, $main);
     }
 
     protected function replyKeyboard(Telegraph $telegraph, Crawler $element): Telegraph
@@ -219,7 +220,7 @@ class HTMLToTelegraph
         } else {
             $uuid = Str::uuid();
             Cache::set($uuid, $element->attr('href'), now()->addHour());
-            $data['callback_data'] = 'action:link;href:'.$uuid;
+            $data['callback_data'] = 'action:link;href:' . $uuid;
         }
 
         return $data;
