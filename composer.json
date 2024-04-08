@@ -18,8 +18,8 @@
     "require": {
         "php": ">=8.2",
         "ext-redis": "*",
-        "illuminate/contracts": "^10.0|^11.0",
-        "illuminate/support": "^10.0|^11.0",
+        "illuminate/contracts": "^10.0",
+        "illuminate/support": "^10.0",
         "spatie/laravel-package-tools": "^1.16",
         "defstudio/telegraph": "^1.42",
         "symfony/dom-crawler": "^6.4"
